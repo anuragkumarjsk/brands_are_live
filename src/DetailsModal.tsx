@@ -1,6 +1,7 @@
 // src/components/BookFetcher.tsx
-import React from 'react';
+import React,{useState} from 'react';
 import { useQuery } from 'react-query';
+import placeholderimage from '../src/assets/placeholderimg.webp'
 import axios from 'axios';
 
 interface Book {
@@ -23,6 +24,10 @@ const fetchBook = async (show: number): Promise<Book> => {
 };
 
 const DetailsModal: React.FC<BookFetcherProps> = ({ show, setShow }) => {
+  const [imageError, setImageError] = useState(false);
+  const handleImageError = () => {
+    setImageError(true);
+  };
   const { isLoading, error, data } = useQuery<Book, Error>(['book', show], () => fetchBook(show), {
     enabled: !!show,
   });
@@ -35,7 +40,7 @@ const DetailsModal: React.FC<BookFetcherProps> = ({ show, setShow }) => {
     {data? 
     <div className='details-modal'>
         <div className='image-c'>
-        <img src={data.cover} alt={data.title} />
+        <img src={imageError? placeholderimage : data.cover} alt={data.title} onError={handleImageError} />
         </div>
         <div className='text-c'>
           <h2>{data.title}</h2>

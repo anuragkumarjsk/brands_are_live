@@ -31,6 +31,7 @@ const BooksList: React.FC<pageChangerProps> = ({pageNumber,setShow}) => {
         {data?.data.map((book) => (
           <Book key={book.id} book={book} setShow={setShow}/>
         ))}
+        {data?.data.length === 0 ? <h1>no more data to show</h1>:null }
       </div>
     </>
   );

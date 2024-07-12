@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 import { HeartIcon as HeartIconOutline } from '@heroicons/react/24/outline';
-
+import placeholderimage from '../src/assets/placeholderimg.webp'
 interface BookProps {
   book: {
     id: number;
@@ -16,7 +16,11 @@ interface BookProps {
 
 const Card: React.FC<BookProps> = ({ book, setShow }) => {
   const [liked, setLiked] = useState<boolean>(false);
+  const [imageError, setImageError] = useState(false);
 
+  const handleImageError = () => {
+    setImageError(true);
+  };
   useEffect(() => {
     const likedList: number[] = JSON.parse(localStorage.getItem('likedlist') || '[]');
     if (likedList.includes(book.id)) {
@@ -51,7 +55,7 @@ const Card: React.FC<BookProps> = ({ book, setShow }) => {
 
       <h2>{book.title} by, {book.author}</h2>
       {/* <span>{book.description}</span> */}
-      <img className='img-card' src={book.cover} alt={book.title} />
+      <img className='img-card' src={imageError? placeholderimage : book.cover} alt={book.title} onError={handleImageError}/>
       <p>Publish Date : {new Date(book.publicationDate).toDateString()}</p>
     </div>
   );
